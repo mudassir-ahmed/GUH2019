@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+    <h1>Demo</h1>
+    <p>
+        Coordinates:
+        (<span id="beta" class="value">Null</span>,
+        <span id="gamma" class="value">Null</span>)
+    </p>
+</body>
+<script>
+    window.addEventListener('deviceorientation', function(event) {
+        var beta = Math.round(event.beta);
+        var gamma = Math.round(event.gamma) + 90;
+        var alpha = Math.round(event.alpha);
+        if (beta > 90) {
+            beta = 180 - beta;
+        }
+        if (beta < -90) {
+            beta = -180 - beta;
+        }
+        if (gamma > 90) {
+            gamma = gamma - 180;
+        }
+        document.getElementById('beta').innerHTML = beta;
+        document.getElementById('gamma').innerHTML = gamma;
+    });
+</script>
+</html>
