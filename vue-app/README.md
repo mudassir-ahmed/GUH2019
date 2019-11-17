@@ -37,4 +37,4 @@ npm install --save @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg
 npm install --save @fortawesome/vue-fontawesome
 npm i gsap
 npm i --save @fortawesome/free-brands-svg-icons
-npm install howler
+npm install --save howler

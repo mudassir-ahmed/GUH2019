@@ -2,12 +2,12 @@
   <div class="remote">
     <div class="btn-autopilot center-all">
       <FontAwesomeIcon icon="robot" size="lg" />
-      <div class="btn-autopilot__trigger center-all">
+      <div @click="toggleAutoPilot()" class="btn-autopilot__trigger center-all">
         <FontAwesomeIcon class="" icon="random" size="sm" />
       </div>
     </div>
 
-    <div @click="toggleAutoPilot()" class="btn-temperature center-all">
+    <div class="btn-temperature center-all">
       <FontAwesomeIcon icon="thermometer-quarter" size="lg" />
       <div
         @click="incrementTemp()"
@@ -32,19 +32,35 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 library.add(fas);
 
+import config from "@/assets/project-config.json";
+import io from "socket.io-client";
+const socket = io(config.URL);
+
 export default {
   components: {
     FontAwesomeIcon
   },
   methods: {
+    buttonSFX() {
+      // Enable sound by uncommenting below
+      //const sound = new Audio(require("../assets/sound/button-sfx.mp3"));
+      //sound.play();
+      window.navigator.vibrate(150);
+    },
     incrementTemp() {
       // emit an event to increase temp
+      socket.emit("increment-temp", {});
+      this.buttonSFX();
     },
     decrementTemp() {
       // emit an event to decrease temp
+      socket.emit("decrement-temp", {});
+      this.buttonSFX();
     },
     toggleAutoPilot() {
       // trigger an event to toggle autopilot
+      socket.emit("toggle-auto-pilot", {});
+      this.buttonSFX();
     },
     toggleFullscreen() {
       let elem = document.body;

@@ -59,8 +59,8 @@ export default {
       default: "user-secret" // no icon
     },
     primary: {
-      type: String,
-      default: "-"
+      type: Number,
+      default: 0
     },
     secondary: {
       type: String,
