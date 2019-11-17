@@ -18,7 +18,7 @@
         :percentage="75"
         variation="medium"
         color="#40d398"
-        :primary="90"
+        :primary="currentSpeed"
         :max="120"
         secondary="KM/H"
         iconName="tachometer-alt"
@@ -31,10 +31,9 @@
       />
       <DataCircle
         class="dashboard__droplets--hide-on-tour"
-        :percentage="25"
         variation="large"
         color="#FFFFFF"
-        :primary="16"
+        :primary="currentMinsLeft"
         :max="20"
         secondary="REMAINING"
         iconName="stopwatch"
@@ -47,10 +46,9 @@
       />
       <DataCircle
         class="dashboard__droplets--hide-on-tour"
-        :percentage="25"
         variation="medium"
         color="#ee9f63"
-        :primary="104"
+        :primary="currentBattery"
         :max="110"
         secondary="KWH"
         iconName="bolt"
@@ -82,7 +80,10 @@ export default {
   data() {
     return {
       currentTemp: 23,
-      isTourActive: false
+      isTourActive: false,
+      currentMinsLeft: 20,
+      currentBattery: 110, // start at max capacity
+      currentSpeed: 80
     };
   },
   components: {
@@ -92,6 +93,9 @@ export default {
     //DashAudioPlayer
   },
   created() {
+    socket.on("change-speed", speed => {
+      this.currentSpeed = speed;
+    });
     socket.on("increment-temp", () => {
       this.currentTemp++;
     });
@@ -114,6 +118,10 @@ export default {
           });
       }
     });
+
+    this.decrementBattery();
+    this.decrementTime();
+    this.randomSpeed();
   },
   methods: {
     toggleFullscreen() {
@@ -128,6 +136,24 @@ export default {
       } else {
         document.exitFullscreen();
       }
+    },
+    decrementBattery() {
+      setTimeout(() => {
+        this.currentBattery -= Math.random() * 5;
+        this.decrementBattery();
+      }, 5000);
+    },
+    decrementTime() {
+      setTimeout(() => {
+        this.currentMinsLeft--;
+        this.decrementTime();
+      }, 60 * 1000);
+    },
+    randomSpeed() {
+      setTimeout(() => {
+        this.currentSpeed += (Math.random() - 0.5) * 10;
+        this.randomSpeed();
+      }, 1000);
     }
   }
 };

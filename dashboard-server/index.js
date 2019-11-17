@@ -30,6 +30,11 @@ io.on("connection", function(socket) {
     console.log("Request to toggle-auto-pilot");
     io.emit("toggle-auto-pilot");
   });
+
+  socket.on("change-speed", function(speed) {
+    console.log("Request to change speed to", speed);
+    io.emit("change-speed", speed);
+  });
 });
 
 http.listen(config.PORT, function() {

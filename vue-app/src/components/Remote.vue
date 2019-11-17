@@ -40,7 +40,38 @@ export default {
   components: {
     FontAwesomeIcon
   },
+  created() {
+    //window.addEventListener("deviceorientation", this.handleOrientation);
+  },
+  destroyed() {
+    //window.removeEventListener("deviceorientation", this.handleOrientation);
+  },
   methods: {
+    handleOrientation(event) {
+      var x = event.beta; // In degree in the range [-180,180]
+      var y = event.gamma; // In degree in the range [-90,90]
+
+      const MAX_SPEED = 120;
+
+      // Because we don't want to have the device upside down
+      // We constrain the x value to the range [-90,90]
+      if (x > 90) {
+        x = 90;
+      }
+      if (x < -90) {
+        x = -90;
+      }
+
+      // To make computation easier we shift the range of
+      // x and y to [0,180]
+      x += 90;
+      y += 90;
+
+      // emit an event to change speed by factor
+      socket.emit("change-speed", (y / 180) * MAX_SPEED);
+
+      alert("speed cahnge");
+    },
     buttonSFX() {
       // Enable sound by uncommenting below
       //const sound = new Audio(require("../assets/sound/button-sfx.mp3"));

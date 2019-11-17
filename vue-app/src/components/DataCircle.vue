@@ -1,9 +1,13 @@
 <template>
   <div :class="`data-droplet data-droplet--${variation}`">
-    <svg viewBox="0 0 36 36" class="data-droplet__chart" :stroke="color">
+    <svg
+      viewBox="0 0 36 36"
+      class="data-droplet__chart"
+      :stroke="percentage >= 10 ? color : DANGER_COLOR"
+    >
       <path
         class="data-droplet__chart-inner"
-        :stroke-dasharray="`${percentage} 100`"
+        :stroke-dasharray="`${percentage >= 0 ? percentage : 0} 100`"
         d="M18 2.0845
       a 15.9155 15.9155 0 0 1 0 31.831
       a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -25,7 +29,7 @@
         <FontAwesomeIcon :icon="iconName" :size="iconSize" />
       </div>
       <div class="data-droplet__data-primary">
-        {{ animatedNumber }}
+        {{ percentage >= 0 ? animatedNumber : 0 }}
       </div>
       <div class="data-droplet__data-secondary">
         {{ secondary }}
@@ -109,7 +113,8 @@ export default {
   },
   data: function() {
     return {
-      tweenedNumber: parseInt(this.primary) // Tweened number should be the value of primary at start
+      tweenedNumber: parseInt(this.primary), // Tweened number should be the value of primary at start,
+      DANGER_COLOR: "#c32f2f"
     };
   }
 };
@@ -226,6 +231,7 @@ export default {
 
     &-outer {
       opacity: 0.1;
+      transition: 0.5s ease-in-out;
     }
   }
 }
